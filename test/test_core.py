@@ -9,7 +9,7 @@ from torch.autograd import Variable
 
 
 # Make sure tests are deterministic:
-cuda = torch.cuda.is_available()
+cuda = False  # torch.cuda.is_available()
 np.random.seed(1)
 torch.manual_seed(1)
 if cuda:
@@ -25,10 +25,10 @@ def to_np(x):
 
 class TestRandomVariables(unittest.TestCase):
     def setUp(self):
-        rv_samples = 2
+        batch_size = 2
         rv_dimension = 5
-        p = torch.normal(torch.zeros(rv_samples, rv_dimension), torch.ones(rv_samples, rv_dimension))
-        p_pos = torch.abs(torch.normal(torch.zeros(rv_samples, rv_dimension), torch.ones(rv_samples, rv_dimension)))
+        p = torch.normal(torch.zeros(batch_size, rv_dimension), torch.ones(batch_size, rv_dimension))
+        p_pos = torch.abs(torch.normal(torch.zeros(batch_size, rv_dimension), torch.ones(batch_size, rv_dimension)))
         p_pos = torch.clamp(p_pos, 0.1, 0.9)
         if cuda:
             p = p.cuda()
@@ -36,16 +36,17 @@ class TestRandomVariables(unittest.TestCase):
         p = Variable(p)
         p_pos = Variable(p_pos)
         self.rv = [
-            stat.NormalUnit((rv_samples, rv_dimension), cuda),
-            stat.NormalDiagonal(p, p_pos),
-            stat.CategoricalUniform(rv_samples, rv_dimension),
+            stat.Normal(size=(batch_size, rv_dimension), cuda=cuda),
+            stat.Normal(p, p_pos),
+            stat.Categorical(size=(batch_size, rv_dimension), cuda=cuda),
             stat.Categorical(p_pos / torch.sum(p_pos, 1).expand_as(p_pos)),
+            stat.Bernoulli(size=(batch_size, rv_dimension), cuda=cuda),
             stat.Bernoulli(p_pos),
-            stat.Uniform01((rv_samples, rv_dimension), cuda)
+            stat.Uniform(size=(batch_size, rv_dimension), cuda=cuda)
         ]
 
     def test_entropy(self):
-        mc_samples = 1000
+        mc_samples = 5000
         for rv in self.rv:
             entropy_avg = 0
             x_avg = 0

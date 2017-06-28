@@ -2,7 +2,7 @@
 
 Probabilistic Programming and Statistical Inference in PyTorch.
 
-# Introduction
+## Introduction
 
 This project is being developed during my time at [Cogent Labs](https://www.cogent.co.jp/).
 
@@ -10,7 +10,7 @@ The documentation is still WIP, a brief API description is reported below. The [
 
 The API might change quickly during this initial development period.
 
-# API
+## API
 
 The first dimension is the batch dimension, over which the samples are assumed to be independent.
 
@@ -30,15 +30,16 @@ class RandomVariable:
 
 # Implemented random variables:
 
-Bernoulli(p, p_min=1E-6)
+Normal(size=(batch_size, rv_dimension), cuda=cuda)
+Normal(mu, sd)
 
-CategoricalUniform(batch_size, num_classes, cuda=False)
-Categorical(p, p_min=1E-6)
+Categorical(size=(batch_size, rv_dimension), cuda=cuda)
+Categorical(p)
 
-Uniform01(size, cuda=False)
+Bernoulli(size=(batch_size, rv_dimension), cuda=cuda)
+Bernoulli(p)
 
-NormalUnit(size, cuda=False)
-NormalDiagonal(mu, sd)
+Uniform(size=(batch_size, rv_dimension), cuda=cuda)
 
 # KL-Divergence:
 
@@ -46,6 +47,17 @@ def kld(rv_from, rv_to)  # --> [batch_size]
 
 ```
 
-# Licensing
+## Changelog
+
+### Version 0.2.0
+
++ removed specialized distributions => more flexible constructors
++ refactoring: distributions into multiple files
+
+### Version 0.1.0
+
++ initial commit
+
+## Licensing
 
 The code is released under the [MIT license](LICENSE).
