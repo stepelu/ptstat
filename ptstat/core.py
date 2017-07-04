@@ -5,9 +5,8 @@ from torch.autograd import Variable
 # TODO:
 # Remove Variable() everywhere when auto-promotion implemented.
 # Make size() method indexable.
-# Use docstring
-# Split to multiple files
-# Use different constructors: optional size and defaulted parameters.
+# Option to remove asserts.
+# Rename log_pdf to log_p ?
 
 
 def _to_v(x, size=None, cuda=False):

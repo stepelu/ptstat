@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='ptstat',
-      version='0.1',
+      version='0.2',
       description='Probabilistic Programming and Statistical Inference in PyTorch',
       url='https://github.com/stepelu/ptstat',
       author='Stefano Peluchetti',
